@@ -36,9 +36,9 @@ assign addr_wa = (addr[31:0] >> 2); //this ram is word addressed, so all the add
 
 always@(*) begin
 if(memread) begin
-    if(addr_wa == 32'h00040000)//0x00100000 = 0x00040000 word address
+    if(addr_wa == 32'h00040000)//0x00100000 = 0x00040000 word addressed
         out_data = N1;
-    else if(addr_wa == 32'h00040001)//word address so 0x00040001
+    else if(addr_wa == 32'h00040001)//word addressed so 0x00040001
         out_data = N2;
     else if(addr_wa == 32'h00000002)//testing
         out_data = 32'h00000088;
