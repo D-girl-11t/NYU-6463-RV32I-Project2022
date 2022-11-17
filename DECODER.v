@@ -65,7 +65,7 @@ case(opcode)
         immsel = 3'b011;//imm[12,10:5],imm[4:1,11]
         end
         3'b100: begin
-        ALU_op_d = 5'b000101;//BLT
+        ALU_op_d = 5'b00101;//BLT
         immsel = 3'b011;//imm[12,10:5],imm[4:1,11]
         end
         3'b101: begin
@@ -73,7 +73,7 @@ case(opcode)
         immsel = 3'b011;//imm[12,10:5],imm[4:1,11]
         end
         3'b110: begin
-        ALU_op_d = 5'b000101;//BLTU
+        ALU_op_d = 5'b00101;//BLTU
         immsel = 3'b011;//imm[12,10:5],imm[4:1,11]
         end
         3'b111: begin
