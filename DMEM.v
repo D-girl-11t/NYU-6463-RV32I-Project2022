@@ -68,5 +68,5 @@ if(memwrite)
     endcase
 end   
 
-//should we add byte/halfword/word selection here?
+
 endmodule
