@@ -33,7 +33,8 @@ REG dut(
 .inst(inst),
 .wrdata(wrdata),
 .rs1data(rs1data),
-.rs2data(rs2data)
+.rs2data(rs2data),
+.wb_update(wb_update)
 );
 
 
@@ -46,10 +47,11 @@ end
 always #5 clk = ~clk;
 
 initial begin
-#5 inst = 32'b000000000000_00110_00111_000_00010_0110011;//rs1 = r6, rs2 = r7, rd = r1, this is ADD just for testing?
+#5 inst = 32'b000000000000_00110_00111_000_00010_0110011;//rs1 = r6, rs2 = r7, rd = r2, this is ADD just for testing, it will not perform the adding
 #5 rst = 0;
 #5 wrdata = 32'hffffffff;
 #5 regwr = 1;
+#5 inst = 32'b000000000000_00010_00100_000_00010_0110011;//rs1 = r2, rs2 = r7, rd = r2, this is ADD just for testing, it will not perform the adding
 end
 
 

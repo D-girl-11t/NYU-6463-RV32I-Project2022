@@ -20,14 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module DECODER(
+module DECODER( 
 input[31:0] instruction,
 output reg[4:0] ALU_op_d,
 output reg[2:0] immsel,
 output reg halt
 );
     
-wire[5:0] opcode;
+wire[6:0] opcode;
 wire[2:0] func3;
 wire[2:0] func7;
 
