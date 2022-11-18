@@ -5,7 +5,7 @@ ANDY DUNG: kd2649       DHANA LAXMI SIRIGIREDDY: ds6992
 
 
 DECODER: 
-My decoder has 1 input for the whole instruction, and it will pick what the ALU and IMMGEN should do base on what instruction it received. It's written in verilog with a single always block and a lot of case statement. Other signals will be controlled by the control unit, like the signals controlling the MUXs.
+The decoder has 1 input for the whole instruction, and it will pick what the ALU and IMMGEN should do base on what instruction it received. It's written in verilog with a single always block and a lot of case statement. Other signals will be controlled by the control unit, like the signals controlling the MUXs.
 
 DECODER_testbench:
 For the testbench, We just give it 3 instructions and see if it will return the correct ALU_op and imm_sel(for selecting immediate), there are just 3 instructions so we just manually check if it's correct.
@@ -31,7 +31,7 @@ DMEM:
 The data memory is word addressed, so every address that goes in will be shifted to right by 2 to be divided by 4, other than the 4K locations for each word, We also have 2 extra locations for the N numbers, DMEM also is responsibale for the byte, half word and word length difference, for storing and loading the data_type signal will decide what to do. Memory writing is clocked but read is not clocked, and the if statement at the begining is to ensure the address will be above 0x80000000, or for me 0x20000000.
 
 DMEM_testbench:
-First we access the special rom for my N number, We set all the memread and memwrite to 1 for convenience purpose, and then set write data to 32'h12345678 and data type to 1, which is half word, then we try an invalid address, it outputted 0 as expected. We then change it to a valid address, as expected it wrote the halfword 5678 into the 4th location(DMEM[3]), then we change data type to 3 which is for LBU, it will store 32 bits to memory but output only 8 bits with 0 extended, which is 00....78.
+First we access the special rom for the N number, We set all the memread and memwrite to 1 for convenience purpose, and then set write data to 32'h12345678 and data type to 1, which is half word, then we try an invalid address, it outputted 0 as expected. We then change it to a valid address, as expected it wrote the halfword 5678 into the 4th location(DMEM[3]), then we change data type to 3 which is for LBU, it will store 32 bits to memory but output only 8 bits with 0 extended, which is 00....78.
 
 
 IMEM:
