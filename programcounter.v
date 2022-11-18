@@ -22,8 +22,8 @@
 
 module programcounter(
 input clk, write, rst,
-input[31:0] new_count, // for immediate
-output[31:0] addr,
+input[31:0] new_count, 
+output reg[31:0] addr,
 output reg pc_update
     );
 
@@ -31,18 +31,18 @@ reg[31:0] pc = 32'h01000000;
     
 always@(posedge clk) begin
    if(!rst) begin
-    if(write) begin
-        addr <= new_count;
-        pc_update <= 1'b1;
-    end
-    else begin
-        addr <= addr;
-        pc_update <= 1'b0;
-    end
+        if(write) begin
+            addr <= new_count;
+            pc_update <= 1'b1;
+        end
+        else begin
+            addr <= addr;
+            pc_update <= 1'b0;
+        end
    end 
    else begin //this is reset
-    addr <= pc;
-    pc_update <= 1'b0;
+        addr <= pc;
+        pc_update <= 1'b0;
    end
 end    
     
