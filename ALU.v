@@ -33,8 +33,8 @@ module ALU(
 reg[31:0] temp = 32'b0;
 always@(*) begin
     case(ALU_op)
-    5'b00000: alu_out = {input2, 12'b0}; //LUI
-    5'b00001: alu_out = input1+{input2, 12'b0};// AUPIC
+    5'b00000: alu_out = {input2[31:12], 12'b0}; //LUI
+    5'b00001: alu_out = input1+{input2[31:12], 12'b0};// AUPIC
     5'b00010: alu_out = input1+input2;//JAL,JALR,LB,LH,LBU,LHU,LW,SB,SH,SW,ADD,ADDI
     5'b00011: zero = (input1 == input2)?1 : 0;//BEQ
     5'b00100: zero = (input1 == input2)?0 : 1;//BNE

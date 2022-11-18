@@ -68,7 +68,7 @@ assign wr_addr = inst[11:7];
 
 always@(posedge clk) begin
     if(rst) begin
-    wb_update = 0;
+    wb_update <= 0;
     r1 <= 32'h00000000;
     r2 <= 32'h00000000;
     r3 <= 32'h00000000;
@@ -137,10 +137,10 @@ always@(posedge clk) begin
             5'd31: r31 <= wrdata;
             default: r0 <= 32'h00000000;
             endcase
-            wb_update = 1'b1;
+            wb_update <= 1'b1;
         end
         else
-            wb_update = 1'b0;
+            wb_update <= 1'b0;
     end
 end
 
