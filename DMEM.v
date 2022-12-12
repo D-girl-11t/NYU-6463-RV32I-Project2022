@@ -93,7 +93,7 @@ always@(posedge clk) begin
     //if(mem) begin
         //mem_wr_comp <= 0;
         if(memwrite) begin
-            if(addr_wa[31:16] == 16'h8000) begin
+            if(addr_wa[31:16] == 16'h2000) begin
                 case(data_type) 
                 3'b000: DMEM[addr_wa[15:0]] <= wr_data[7:0];//SB
                 3'b001: DMEM[addr_wa[15:0]] <= wr_data[15:0];//SH
