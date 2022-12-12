@@ -111,6 +111,7 @@ always@(posedge clk) begin
                     immsel <= 3'b011;//imm[12,10:5],imm[4:1,11]
                     ALUsrcA <= 1; //get it from rs1
                     ALUsrcB <= 0; //get it from rs2
+                    PCsel <= 1;// pc = pc+imm
                     branch <= 1;
                     end
                     3'b100: begin
@@ -118,6 +119,7 @@ always@(posedge clk) begin
                     immsel <= 3'b011;//imm[12,10:5],imm[4:1,11]
                     ALUsrcA <= 1; //get it from rs1
                     ALUsrcB <= 0; //get it from rs2
+                    PCsel <= 1;// pc = pc+imm
                     branch <= 1;
                     end
                     3'b101: begin
@@ -125,6 +127,7 @@ always@(posedge clk) begin
                     immsel <= 3'b011;//imm[12,10:5],imm[4:1,11]
                     ALUsrcA <= 1; //get it from rs1
                     ALUsrcB <= 0; //get it from rs2
+                    PCsel <= 1;// pc = pc+imm
                     branch <= 1;
                     end
                     3'b110: begin
@@ -132,6 +135,7 @@ always@(posedge clk) begin
                     immsel <= 3'b011;//imm[12,10:5],imm[4:1,11]
                     ALUsrcA <= 1; //get it from rs1
                     ALUsrcB <= 0; //get it from rs2
+                    PCsel <= 1;// pc = pc+imm
                     branch <= 1;
                     end
                     3'b111: begin
@@ -139,6 +143,7 @@ always@(posedge clk) begin
                     immsel <= 3'b011;//imm[12,10:5],imm[4:1,11]
                     ALUsrcA <= 1; //get it from rs1
                     ALUsrcB <= 0; //get it from rs2
+                    PCsel <= 1;// pc = pc+imm
                     branch <= 1;
                     end
                     default: ALU_op_d <= 5'b11111; //out of aluop range
