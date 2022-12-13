@@ -177,7 +177,7 @@ always@(state, halt, pc_update, id_comp, instr_fetched, wb_comp)begin
             end       
         end
         halted: begin
-            next_state = halted;
+            next_state <= halted;
             instrfetch <= 0;
             decode <= 0;
             //mem <= 0;
