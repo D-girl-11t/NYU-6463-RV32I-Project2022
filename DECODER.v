@@ -37,7 +37,7 @@ output reg[2:0] mem_datatype
     
 wire[6:0] opcode;
 wire[2:0] func3;
-wire[2:0] func7;
+wire[6:0] func7;
 
 assign opcode = instruction[6:0];
 assign func3 = instruction[14:12];
@@ -278,6 +278,7 @@ always@(posedge clk) begin
                     3'b101: begin
                     if(func7 == 7'b0100000) begin
                         ALU_op_d <= 5'b10000;//SRAI
+                        immsel <= 3'b010;//imm[11:0]
                         ALUsrcA <= 1;//from rs1
                         ALUsrcB <= 1;
                         WBsel <= 2;// from alu out
@@ -285,6 +286,7 @@ always@(posedge clk) begin
                     end
                     else if(func7 == 0) begin
                         ALU_op_d <= 5'b01111;//SRLI
+                        immsel <= 3'b010;//imm[11:0]
                         ALUsrcA <= 1;//from rs1 
                         ALUsrcB <= 1;
                         WBsel <= 2;// from alu out
@@ -296,6 +298,7 @@ always@(posedge clk) begin
                     end    
                     3'b110: begin
                         ALU_op_d <= 5'b01100;//ORI
+                        immsel <= 3'b010;//imm[11:0]
                         ALUsrcA <= 1;//from rs1
                         ALUsrcB <= 1;
                         WBsel <= 2;// from alu out
@@ -303,6 +306,7 @@ always@(posedge clk) begin
                     end
                     3'b111: begin
                         ALU_op_d <= 5'b01101;//ANDI
+                        immsel <= 3'b010;//imm[11:0]
                         ALUsrcA <= 1;//from rs1
                         ALUsrcB <= 1;
                         WBsel <= 2;// from alu out
