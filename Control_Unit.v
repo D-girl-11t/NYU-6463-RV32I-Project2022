@@ -40,7 +40,7 @@ output reg instrfetch, wb
 reg[2:0] state, next_state;    
 parameter IF = 3'd0, ID = 3'd1, WB = 3'd2, PC = 3'd3, halted = 3'd4;
 
-always@(state, halt, pc_update, id_comp, instr_fetched, wb_comp)begin
+always@(state, halt, pc_update, id_comp, instr_fetched, wb_comp, branch, memwrite)begin
     case(state)
         // idle state
         /*
@@ -104,48 +104,7 @@ always@(state, halt, pc_update, id_comp, instr_fetched, wb_comp)begin
                         next_state <= ID;                            
                 end
         end
-        /*
-        MEM: begin
-            if (halt)
-                next_state <= halted;
-            else begin
-                mem <= 1;
-                if(mem_rd_comp) begin
-                    if (regwrite == 1) begin
-                        next_state <= WB;//load instruction go to WB
-                        mem <= 0;
-                    end
-                    else begin
-                        next_state <= PC;//store instruction go straight to PC
-                        mem <= 0;
-                    end
-                end
-                if(mem_wr_comp) begin
-                    next_state <= PC;
-                    mem <= 0;    
-                end
-                */
-                    /*
-                    else if (regwrite == 0) begin
-                        next_state <= PC;//store instruction go straight to PC
-                        mem <= 0;
-                    end
-                    */
-                    /*
-                if(mem_rd_comp) begin
-                    next_state <= WB;//load instruction go to WB
-                    mem <= 0;
-                end
-                else if(mem_wr_comp)begin
-                    next_state <= PC;
-                    mem <= 0;    
-                end
-                    
-                else
-                    next_state <= MEM;
-            end
-        end
-        */ 
+         
         WB: begin
             if (halt)
                 next_state <= halted;
@@ -180,7 +139,6 @@ always@(state, halt, pc_update, id_comp, instr_fetched, wb_comp)begin
             next_state <= halted;
             instrfetch <= 0;
             decode <= 0;
-            //mem <= 0;
             wb <= 0;
             PCwrite <= 0;
         end

@@ -25,6 +25,6 @@ input[31:0] pc_in_s, imm_in_s,
 output[31:0] pc_out_s //s for sum module
     );
     
-assign pc_out_s = pc_in_s + imm_in_s;                           
-    
+assign pc_out_s = (pc_in_s + imm_in_s);                           
+  
 endmodule

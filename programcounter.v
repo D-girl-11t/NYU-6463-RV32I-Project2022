@@ -42,7 +42,7 @@ always@(posedge clk) begin
    end 
    else begin //this is reset
         addr <= pc;
-        pc_update <= 1'b0;
+        pc_update <= 1'b1;
    end
 end    
     

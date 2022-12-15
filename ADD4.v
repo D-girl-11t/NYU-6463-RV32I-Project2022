@@ -28,3 +28,4 @@ output[31:0] pc_out_a//a for add4 module
 assign pc_out_a = pc_in_a + 3'd4;
 
 endmodule
+

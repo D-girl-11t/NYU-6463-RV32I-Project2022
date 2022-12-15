@@ -21,13 +21,16 @@
 
 
 module Processor(
-input wire clk,
-input wire reset,
-output wire complete,
-output wire[31:0] memread_data,
-output wire[31:0] memwrite_data
+input wire CLK100MHZ,
+input wire btnC,
+input wire[15:0] sw,
+//output wire seg,
+//output wire[15:0] memread_data,
+//output wire[15:0] memwrite_data,
+//output wire[15:0] mem_out
+output wire[15:0] LED
     );
-    
+  
 //--------------PC--------------------
 //wire clk, 
 wire PCwrite, pc_update;
@@ -41,8 +44,9 @@ wire[31:0] instr;// output instruction
 
 //--------------DECODER---------------
 wire decode, id_comp, branch, halt, ALUsrcA, ALUsrcB, regwrite, memread, memwrite;
-wire[1:0] WBsel, PCsel;
-wire[2:0] immsel, mem_datatype;
+wire sign_extend;
+wire[1:0] WBsel, PCsel, mem_datatype;
+wire[2:0] immsel; 
 wire[4:0] alu_op_d;
 //------------------------------------
 
@@ -62,7 +66,10 @@ wire[31:0] rs1data_mux, rs2data_mux, alu_out;
 
 //--------------DMEM------------------
 //wire mem, mem_rd_comp, mem_wr_comp;
-wire[31:0] wr_data, out_data;// output instruction
+wire[31:0] wr_data, LSU_wr_data; //out_data;// output instruction
+wire[3:0] byte_enable;
+wire[31:0] LSU_rs2;
+//wire[31:0] result;
 //------------------------------------
 
 //--------------ADD4------------------
@@ -82,8 +89,9 @@ wire[31:0] JAL_store;
 //------------------------------------
 
 
+
 Control_Unit CU(
-.clk(clk),                       
+.clk(CLK100MHZ),                       
 .pc_update(pc_update),//from PC                 
 .instr_fetched(instr_fetched),//from IF             
 .memwrite(memwrite),//from DECODER 
@@ -104,16 +112,16 @@ Control_Unit CU(
 );
 
 programcounter PC(
-.clk(clk),
+.clk(CLK100MHZ),
 .PCwrite(PCwrite),//from control unit
-.rst(reset),
+.rst(btnC),
 .new_count(new_count),
 .addr(addr),//to IMEM, muxsrcA, PCSUM, ADD4
 .pc_update(pc_update)
 );
 
 IMEM IMEM(
-.clk(clk),
+.clk(CLK100MHZ),
 .instrfetch(instrfetch),//from control unit
 .addr_imem(addr),//from pc
 .instr(instr),//to DECODER, REG, and IMMGEN
@@ -121,10 +129,11 @@ IMEM IMEM(
 );
 
 DECODER DECODER(
-.clk(clk),
+.clk(CLK100MHZ),
 .decode(decode),//from control unit
 .instruction(instr),//from IMEM
 .id_comp(id_comp),//to control unit
+.sign_extend(sign_extend),//to LSU
 .branch(branch),//to control unit
 .halt(halt),//to control unit
 .ALUsrcA(ALUsrcA),//to muxsrcA
@@ -140,8 +149,8 @@ DECODER DECODER(
 );
 
 REG REG(
-.clk(clk),
-.rst(reset),
+.clk(CLK100MHZ),
+.rst(btnC),
 .wb(wb),//from control unit
 .regwr(regwrite),//from decoder
 .inst(instr),//from IMEM
@@ -166,16 +175,18 @@ ALU ALU(
 );
 
 DMEM DMEM(
-.clk(clk),
+.clk(CLK100MHZ),
 .memread(memread),//from DECODER
 .memwrite(memwrite),//from DECODER
 //.mem(mem),//from control unit
-.data_type(mem_datatype),//from DECODER
+//.data_type(mem_datatype),//from DECODER
 .addr(alu_out),//from ALU
-.wr_data(rs2data),//from REG
+.wr_data(LSU_rs2),//from REG
 //.mem_rd_comp(mem_rd_comp),//to control unit
 //.mem_wr_comp(mem_wr_comp),//to control unit
-.out_data(wr_data)//to muxWB
+.out_data(wr_data),//to LSU*
+.switch(sw),
+.byte_enable()
 ); 
 
 MUX2 muxsrcA(
@@ -221,7 +232,7 @@ MUX3 MUXPC(
 MUX3 MUXWB(
 .sel_mux3(WBsel),//from control unit
 .in_mux3_a(JAL_store),//from ADD4, JAL
-.in_mux3_b(wr_data),//from DMEM
+.in_mux3_b(LSU_wr_data),//from LSU*
 .in_mux3_c(alu_out),//from ALU
 .out_mux3(wrdata)//to REG
 );
@@ -231,13 +242,34 @@ SUBPC PC_JAL(
 .JAL_store(JAL_store)
 );
 
+LSU loadstore(
+.sign_extend(sign_extend),
+.datatype(mem_datatype),//from DECODER
+.addr(alu_out),//from alu
+.rs2data(rs2data),//from reg
+.wr_regdata(wr_data),//from DMEM
+.byte_enable(byte_enable),//to MUXWB*
+.LSU_regdata(LSU_wr_data),
+.LSU_rs2(LSU_rs2)
+);
+
+
+
+
+
+
+
+
+assign LED = wr_data[15:0];
 /*
 always@(*)begin
     complete = halt;
 end
 */
-assign complete = halt;
-assign memread_data = wr_data; 
-assign memwrite_data = rs2data;
+//assign seg[0] = halt;
+
+//assign mem_out = (pick)? result[15:0]:wr_data[15:0]; 
+//assign memread_data = wr_data[15:0];
+//assign memwrite_data = rs2data[15:0];
 
 endmodule

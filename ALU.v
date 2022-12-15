@@ -28,10 +28,498 @@ module ALU(
     output reg zero
     );
     
-    
-    
-reg[31:0] temp = 32'b0;
+/*   
 always@(*) begin 
+    case(ALU_op)
+    5'b00000: begin 
+        alu_out <= {input2[31:12], 12'b0}; //LUI
+        zero <= 0;
+        end
+    5'b00001: begin
+        alu_out <= input1+{input2[31:12], 12'b0};// AUPIC
+        zero <= 0;
+        end
+    5'b00010: begin
+        alu_out <= input1+input2;//JAL,JALR,LB,LH,LBU,LHU,LW,SB,SH,SW,ADD,ADDI
+        zero <= 0;
+        end
+    5'b00011: begin
+        zero <= (input1 == input2)?1 : 0;//BEQ
+        alu_out <= 32'h0;
+        end
+    5'b00100: begin
+        zero <= (input1 != input2)?1 : 0;//BNE
+        alu_out <= 32'h0;
+        end
+    5'b00101: begin
+        zero <= ($signed(input1) < $signed(input2))?1 : 0;//BLT 
+        alu_out <= 32'h0;
+        end
+    5'b00110: begin
+        zero <= ($signed(input1) >= $signed(input2))?1 : 0;//BGE 
+        alu_out <= 32'h0;
+        end
+    5'b00111: begin
+        zero <= (input1 < input2)?1 : 0;//BLTU
+        alu_out <= 32'h0;
+        end
+    5'b01000: begin
+        zero <= (input1 >= input2)?1 : 0;//BGEU
+        alu_out <= 32'h0;
+        end
+    5'b01001: begin
+        alu_out <= ($signed(input1) < $signed(input2))?1 : 0; //SLTI,SLT
+        zero <= 0;
+        end
+    5'b01010: begin
+        alu_out <= (input1 < input2)?1 : 0;//SLTIU,SLTU
+        zero <= 0;
+        end
+    5'b01011: begin
+        alu_out <= input1 ^ input2; //XORI,XOR
+        zero <= 0;
+        end
+    5'b01100: begin
+        alu_out <= input1 | input2; //ORI,OR
+        zero <= 0;
+        end
+    5'b01101: begin
+        alu_out <= input1 & input2; //ANDI,AND
+        zero <= 0;
+        end
+    5'b01110: begin //SLLI, SLL
+        case(input2[4:0])
+           5'b00000: begin 
+           alu_out <= input1;
+           zero <= 0;
+           end
+           5'b00001: begin
+           alu_out <= {input1[30:0],1'b0};
+           zero <= 0;
+           end
+           5'b00010: begin
+           alu_out <= {input1[29:0],2'b0}; 
+           zero <= 0;
+           end          
+           5'b00011: begin
+           alu_out <= {input1[28:0],3'b0};
+           zero <= 0;
+           end          
+           5'b00100: begin
+           alu_out <= {input1[27:0],4'b0};
+           zero <= 0;
+           end           
+           5'b00101: begin
+           alu_out <= {input1[26:0],5'b0};
+           zero <= 0;
+           end           
+           5'b00110: begin
+           alu_out <= {input1[25:0],6'b0};
+           zero <= 0;
+           end           
+           5'b00111: begin
+           alu_out <= {input1[24:0],7'b0};
+           zero <= 0;
+           end           
+           5'b01000: begin
+           alu_out <= {input1[23:0],8'b0};
+           zero <= 0;
+           end           
+           5'b01001: begin
+           alu_out <= {input1[22:0],9'b0};
+           zero <= 0;
+           end           
+           5'b01010: begin
+           alu_out <= {input1[21:0],10'b0};
+           zero <= 0;
+           end           
+           5'b01011: begin
+           alu_out <= {input1[20:0],11'b0};
+           zero <= 0;
+           end           
+           5'b01100: begin
+           alu_out <= {input1[19:0],12'b0};
+           zero <= 0;
+           end           
+           5'b01101: begin
+           alu_out <= {input1[18:0],13'b0};
+           zero <= 0;
+           end           
+           5'b01110: begin
+           alu_out <= {input1[17:0],14'b0};
+           zero <= 0;
+           end           
+           5'b01111: begin
+           alu_out <= {input1[16:0],15'b0};
+           zero <= 0;
+           end           
+           5'b10000: begin
+           alu_out <= {input1[15:0],16'b0};
+           zero <= 0;
+           end           
+           5'b10001: begin
+           alu_out <= {input1[14:0],17'b0};
+           zero <= 0;
+           end           
+           5'b10010: begin
+           alu_out <= {input1[13:0],18'b0};
+           zero <= 0;
+           end           
+           5'b10011: begin
+           alu_out <= {input1[12:0],19'b0};
+           zero <= 0;
+           end           
+           5'b10100: begin
+           alu_out <= {input1[11:0],20'b0};
+           zero <= 0;
+           end           
+           5'b10101: begin
+           alu_out <= {input1[10:0],21'b0};
+           zero <= 0;
+           end           
+           5'b10110: begin
+           alu_out <= {input1[09:0],22'b0};
+           zero <= 0;
+           end           
+           5'b10111: begin
+           alu_out <= {input1[08:0],23'b0};
+           zero <= 0;
+           end           
+           5'b11000: begin
+           alu_out <= {input1[07:0],24'b0};
+           zero <= 0;
+           end           
+           5'b11001: begin
+           alu_out <= {input1[06:0],25'b0};
+           zero <= 0;
+           end           
+           5'b11010: begin
+           alu_out <= {input1[05:0],26'b0};
+           zero <= 0;
+           end           
+           5'b11011: begin
+           alu_out <= {input1[04:0],27'b0};
+           zero <= 0;
+           end           
+           5'b11100: begin
+           alu_out <= {input1[03:0],28'b0};
+           zero <= 0;
+           end           
+           5'b11101: begin
+           alu_out <= {input1[02:0],29'b0};
+           zero <= 0;
+           end           
+           5'b11110: begin
+           alu_out <= {input1[01:0],30'b0};
+           zero <= 0;
+           end
+           5'b11111: begin
+           alu_out <= {input1[0],31'b0};
+           zero <= 0;
+           end           
+           default: begin
+           alu_out <= input1;
+           zero <= 0;
+           end
+        endcase
+    end
+            
+    5'b01111: begin //SRLI,SRL
+    case(input2[4:0])
+       5'b00000: begin
+       alu_out <= input1;
+       zero <= 0;
+       end
+       5'b00001: begin
+       alu_out <= {1'b0,input1[31:5'b00001]};
+       zero <= 0;
+       end
+       5'b00010: begin
+       alu_out <= {2'b0,input1[31:5'b00010]};
+       zero <= 0;
+       end
+       5'b00011: begin
+       alu_out <= {3'b0,input1[31:5'b00011]};
+       zero <= 0;
+       end
+       5'b00100: begin
+       alu_out <= {4'b0,input1[31:5'b00100]};
+       zero <= 0;
+       end
+       5'b00101: begin
+       alu_out <= {5'b0,input1[31:5'b00101]};
+       zero <= 0;
+       end
+       5'b00110: begin
+       alu_out <= {6'b0,input1[31:5'b00110]};
+       zero <= 0;
+       end
+       5'b00111: begin
+       alu_out <= {7'b0,input1[31:5'b00111]};
+       zero <= 0;
+       end
+       5'b01000: begin
+       alu_out <= {8'b0,input1[31:5'b01000]};
+       zero <= 0;
+       end
+       5'b01001: begin
+       alu_out <= {9'b0,input1[31:5'b01001]};
+       zero <= 0;
+       end
+       5'b01010: begin
+       alu_out <= {10'b0,input1[31:5'b01010]};
+       zero <= 0;
+       end
+       5'b01011: begin
+       alu_out <= {11'b0,input1[31:5'b01011]};
+       zero <= 0;
+       end
+       5'b01100: begin
+       alu_out <= {12'b0,input1[31:5'b01100]};
+       zero <= 0;
+       end
+       5'b01101: begin
+       alu_out <= {13'b0,input1[31:5'b01101]};
+       zero <= 0;
+       end
+       5'b01110: begin
+       alu_out <= {14'b0,input1[31:5'b01110]};
+       zero <= 0;
+       end
+       5'b01111: begin
+       alu_out <= {15'b0,input1[31:5'b01111]};
+       zero <= 0;
+       end
+       5'b10000: begin
+       alu_out <= {16'b0,input1[31:5'b10000]};
+       zero <= 0;
+       end
+       5'b10001: begin
+       alu_out <= {17'b0,input1[31:5'b10001]};
+       zero <= 0;
+       end
+       5'b10010: begin
+       alu_out <= {18'b0,input1[31:5'b10010]};
+       zero <= 0;
+       end
+       5'b10011: begin
+       alu_out <= {19'b0,input1[31:5'b10011]};
+       zero <= 0;
+       end
+       5'b10100: begin
+       alu_out <= {20'b0,input1[31:5'b10100]};
+       zero <= 0;
+       end
+       5'b10101: begin
+       alu_out <= {21'b0,input1[31:5'b10101]};
+       zero <= 0;
+       end
+       5'b10110: begin
+       alu_out <= {22'b0,input1[31:5'b10110]};
+       zero <= 0;
+       end
+       5'b10111: begin
+       alu_out <= {23'b0,input1[31:5'b10111]};
+       zero <= 0;
+       end
+       5'b11000: begin
+       alu_out <= {24'b0,input1[31:5'b11000]};
+       zero <= 0;
+       end
+       5'b11001: begin
+       alu_out <= {25'b0,input1[31:5'b11001]};
+       zero <= 0;
+       end
+       5'b11010: begin
+       alu_out <= {26'b0,input1[31:5'b11010]};
+       zero <= 0;
+       end
+       5'b11011: begin
+       alu_out <= {27'b0,input1[31:5'b11011]};
+       zero <= 0;
+       end
+       5'b11100: begin
+       alu_out <= {28'b0,input1[31:5'b11100]};
+       zero <= 0;
+       end
+       5'b11101: begin
+       alu_out <= {29'b0,input1[31:5'b11101]};
+       zero <= 0;
+       end
+       5'b11110: begin
+       alu_out <= {30'b0,input1[31:5'b11110]};
+       zero <= 0;
+       end
+       5'b11111: begin
+       alu_out <= {31'b0,input1[31:5'b11111]};
+       zero <= 0;
+       end
+       default: begin
+       alu_out <= input1;
+       zero <= 0;
+       end
+    endcase
+    end
+    
+    5'b10000: begin //SRAI,SRA
+    case(input2[4:0])
+       5'b00000: begin
+       alu_out <= input1;
+       zero <= 0;
+       end
+       5'b00001: begin
+       alu_out <= {input1[31],input1[31:5'b00001]}; 
+       zero <= 0;
+       end
+       5'b00010: begin
+       alu_out <= {{2{input1[31]}},input1[31:5'b00010]};
+       zero <= 0;
+       end
+       5'b00011: begin
+       alu_out <= {{3{input1[31]}},input1[31:5'b00011]};
+       zero <= 0;
+       end
+       5'b00100: begin
+       alu_out <= {{4{input1[31]}},input1[31:5'b00100]};
+       zero <= 0;
+       end
+       5'b00101: begin
+       alu_out <= {{5{input1[31]}},input1[31:5'b00101]};
+       zero <= 0;
+       end
+       5'b00110: begin 
+       alu_out <= {{6{input1[31]}},input1[31:5'b00110]};
+       zero <= 0;
+       end
+       5'b00111: begin
+       alu_out <= {{7{input1[31]}},input1[31:5'b00111]};
+       zero <= 0;
+       end
+       5'b01000: begin
+       alu_out <= {{8{input1[31]}},input1[31:5'b01000]};
+       zero <= 0;
+       end
+       5'b01001: begin
+       alu_out <= {{9{input1[31]}},input1[31:5'b01001]};
+       zero <= 0;
+       end
+       5'b01010: begin
+       alu_out <= {{10{input1[31]}},input1[31:5'b01010]};
+       zero <= 0;
+       end
+       5'b01011: begin
+       alu_out <= {{11{input1[31]}},input1[31:5'b01011]};
+       zero <= 0;
+       end
+       5'b01100: begin
+       alu_out <= {{12{input1[31]}},input1[31:5'b01100]};
+       zero <= 0;
+       end
+       5'b01101: begin
+       alu_out <= {{13{input1[31]}},input1[31:5'b01101]};
+       zero <= 0;
+       end
+       5'b01110: begin
+       alu_out <= {{14{input1[31]}},input1[31:5'b01110]};
+       zero <= 0;
+       end
+       5'b01111: begin
+       alu_out <= {{15{input1[31]}},input1[31:5'b01111]};
+       zero <= 0;
+       end
+       5'b10000: begin
+       alu_out <= {{16{input1[31]}},input1[31:5'b10000]};
+       zero <= 0;
+       end
+       5'b10001: begin
+       alu_out <= {{17{input1[31]}},input1[31:5'b10001]};
+       zero <= 0;
+       end
+       5'b10010: begin
+       alu_out <= {{18{input1[31]}},input1[31:5'b10010]};
+       zero <= 0;
+       end
+       5'b10011: begin
+       alu_out <= {{19{input1[31]}},input1[31:5'b10011]};
+       zero <= 0;
+       end
+       5'b10100: begin
+       alu_out <= {{20{input1[31]}},input1[31:5'b10100]};
+       zero <= 0;
+       end
+       5'b10101: begin
+       alu_out <= {{21{input1[31]}},input1[31:5'b10101]};
+       zero <= 0;
+       end
+       5'b10110: begin
+       alu_out <= {{22{input1[31]}},input1[31:5'b10110]};
+       zero <= 0;
+       end
+       5'b10111: begin
+       alu_out <= {{23{input1[31]}},input1[31:5'b10111]};
+       zero <= 0;
+       end
+       5'b11000: begin
+       alu_out <= {{24{input1[31]}},input1[31:5'b11000]};
+       zero <= 0;
+       end
+       5'b11001: begin
+       alu_out <= {{25{input1[31]}},input1[31:5'b11001]};
+       zero <= 0;
+       end
+       5'b11010: begin
+       alu_out <= {{26{input1[31]}},input1[31:5'b11010]};
+       zero <= 0;
+       end
+       5'b11011: begin 
+       alu_out <= {{27{input1[31]}},input1[31:5'b11011]};
+       zero <= 0;
+       end
+       5'b11100: begin
+       alu_out <= {{28{input1[31]}},input1[31:5'b11100]};
+       zero <= 0;
+       end
+       5'b11101: begin
+       alu_out <= {{29{input1[31]}},input1[31:5'b11101]};
+       zero <= 0;
+       end
+       5'b11110: begin
+       alu_out <= {{30{input1[31]}},input1[31:5'b11110]};
+       zero <= 0;
+       end
+       5'b11111: begin
+       alu_out <= {{31{input1[31]}},input1[31:5'b11111]};
+       zero <= 0;
+       end
+       default: begin
+       alu_out <= input1;
+       zero <= 0;
+       end
+    endcase
+    end
+                   
+    5'b10001: begin
+    alu_out <=  input1 - input2; //SUB
+    zero <= 0;
+    end
+    5'b10010: begin
+    alu_out <= 0 + input2;
+    zero <= 0;
+    end
+    5'b10011: begin
+    alu_out <= input1 + input2 - 32'h01000000;//JAL,JALR
+    zero <= 0;
+    end
+    default: begin
+             zero <= 0;
+             alu_out <= 32'h0;
+             end
+    endcase
+     
+end
+*/
+ 
+always@(*) begin
     case(ALU_op)
     5'b00000: alu_out <= {input2[31:12], 12'b0}; //LUI
     5'b00001: alu_out <= input1+{input2[31:12], 12'b0};// AUPIC
@@ -168,6 +656,9 @@ always@(*) begin
     endcase
      
 end
-  
+
+
+
+
         
 endmodule

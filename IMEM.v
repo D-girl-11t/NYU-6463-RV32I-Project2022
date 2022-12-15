@@ -29,67 +29,13 @@ output reg instr_fetched
 
 parameter IMEM_size = 2048;
 
-reg[31:0] rom_words [0:(IMEM_size/4)-1];
 reg[31:0] IMEM [0:(IMEM_size/4)-1];
 
-
-
-/*
-reg[7:0] IMEM0[0:(IMEM_size/4)-1];  
-reg[7:0] IMEM1[0:(IMEM_size/4)-1];  
-reg[7:0] IMEM2[0:(IMEM_size/4)-1];  
-reg[7:0] IMEM3[0:(IMEM_size/4)-1];
-*/
-
-
-/*
 initial begin
-rom_words[0] = 32'b000000001000_00001_000_00010_0000011;
-rom_words[1] = 32'b1111111111111111111111111110011;//halt
-//rom_words[511] = 32'hffffffff;
+    $readmemh("euclidean_imem.mem", IMEM);
+    //$readmemh("ledtest_imem.mem", IMEM);
+    //$readmemh("odd_imem.mem", IMEM);
 end
-*/
-
-
-initial begin
-    $readmemh("imem.mem", rom_words);
-end
-
-/*
-always@(*) begin
-if(instrfetch) begin
-    if(addr_imem[31:12] == 20'b0000_0001_0000_0000_0000)
-        instr = {IMEM0[addr_imem[11:0]>>2],IMEM1[addr_imem[11:0]>>2],IMEM2[addr_imem[11:0]>>2],IMEM3[addr_imem[11:0]>>2]};// this is big endian  
-end
-end
-
-    
-always@(posedge clk) begin
-if(instrfetch) begin
-    instrf_update = 1'b1;
-    if(addr_imem[31:12] == 20'b0000_0001_0000_0000_0000) begin// instruction memory begins at 0x01000000
-        IMEM0[addr_imem[11:0]>>2] = rom_words[addr_imem[11:0]>>2][31:24];
-        IMEM1[addr_imem[11:0]>>2] = rom_words[addr_imem[11:0]>>2][23:16];
-        IMEM2[addr_imem[11:0]>>2] = rom_words[addr_imem[11:0]>>2][15:8];
-        IMEM3[addr_imem[11:0]>>2] = rom_words[addr_imem[11:0]>>2][7:0];  //address incremented by 4 and we only have 512 addresses, so the addresses needs to be divided by 4  
-    end
-    else 
-        instr = 32'h0;    
-end
-else 
-instrf_update = 1'b0;
-end    
-*/
-always@(*) begin
-    if(instrfetch) begin
-        if(addr_imem[31:12] == 20'b0000_0001_0000_0000_0000)// instruction memory begins at 0x01000000
-            IMEM[addr_imem[11:0]>>2] <= rom_words[addr_imem[11:0]>>2];//address incremented by 4 and we only have 512 addresses, so the addresses needs to be divided by 4  
-        else 
-            IMEM[addr_imem[11:0]>>2] <= 32'hx;    
-    end
-end
-
-
 
 always@(posedge clk) begin
     if(instrfetch) begin
@@ -97,6 +43,8 @@ always@(posedge clk) begin
             instr <= IMEM[addr_imem[11:0]>>2];// this is big endian
             instr_fetched <= 1'b1;
         end
+        else
+            instr_fetched <= 1'b0;
     end
     else begin
         instr <= instr;
