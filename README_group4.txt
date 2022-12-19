@@ -3,19 +3,20 @@ Group 4
 Members: Andy Dung, Dhana Laxmi Sirigireddy 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 Test cases:
 
 Load values into register:
 
-0002f293	andi x0, x0, 0 # Clear register t0
-00037313	andi x1, x1, 0 # Clear register t1
-0003f393	andi x2, x2, 0 # Clear register t2
-000e7e13	andi x3, x3, 0 # Clear register t3
-0ff00293	addi x5 x0 255	(li x0, FF) # Load a 8-bit number to t0
-00010337	lui x6 16	(li x1, FFFF) # Load a 16-bit number to t1
-fff30313	addi x6 x6 -1	(li x1, FFFF) # Load a 16-bit number to t1
-fff00393	addi x7 x0 -1	(li x2, FFFFFFFF) # Load a 32-bit number to t2
-fff00e13	addi x28 x0 -1	(li x3, 7FFFFFFFFFFFFFFF) # Load a 64-bit number to t3
+0002f293	andi x0, x0, 0   # Clear register x0
+00037313	andi x1, x1, 0   # Clear register x1
+0003f393	andi x2, x2, 0   # Clear register x2
+000e7e13	andi x3, x3, 0 	 # Clear register x3
+0ff00293	addi x5 x0 255	 # Load a 8-bit number to x5
+00010337	lui x6 16	 # Load a 16-bit number to x6
+fff30313	addi x6 x6 -1	 # Load a 16-bit number to x6
+fff00393	addi x7 x0 -1	 # Load a 32-bit number to x7
+fff00e13	addi x28 x0 -1	 # Load the same number as x7 to x28
 
 This will load values into x5, x6, x7, and x28.
 
@@ -23,10 +24,10 @@ This will load values into x5, x6, x7, and x28.
 
 Data between registers:
 
-0002f293	andi x5 x5 0	# Clear register t0
-00037313	andi x6 x6 0	# Clear register t1
-04a00293	addi x5 x0 146	# Load register t0 with a value
-00028313	addi x6 x5 0
+0002f293	andi x5 x5 0	# Clear register x5
+00037313	andi x6 x6 0	# Clear register x6
+04a00293	addi x5 x0 146	# Load register x5 with a value
+00028313	addi x6 x5 0	# put value in x5 to x6
 
 This will put 146 into x5 and put x5 which is 146 into x6.
 
