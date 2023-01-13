@@ -1,4 +1,4 @@
-# NYU-6463-RV32I-Project2022
+# 6463-RV32I-Project2022
 Advance Hardware Design Course 
 
 ANDY DUNG: kd2649       DHANA LAXMI SIRIGIREDDY: ds6992
